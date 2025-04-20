@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Meow.Views.TrangGiongMeo"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:Meow.Converters"
+    xmlns:controls="clr-namespace:Meow.Controls"
+    xmlns:ffImageLoading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Compat.Maui"
+    xmlns:model="clr-namespace:Meow.Models"
+    xmlns:reusablecomponent="clr-namespace:Meow.ReusableComponents"
+    xmlns:viewModel="clr-namespace:Meow.ViewModels"
+    x:DataType="viewModel:GiongMeoViewModel">
+
+    <ContentPage.Resources>
+        <converter:TinhCachSangTiengVietConverter x:Key="TinhCachConverter" />
+        <Style TargetType="Border">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource violet_9_light}, Dark={StaticResource purple_3_dark}}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource violet_12_light}, Dark={StaticResource purple_9_dark}}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <reusablecomponent:TieuDeThanhPhanDungLai />
+    </Shell.TitleView>
+
+    <Grid RowDefinitions="*">
+        <ScrollView Grid.Row="0">
+            <Grid Padding="12,20,12,12" RowDefinitions="50, 36, 240, 34, Auto, 12, Auto, 10, Auto, 12, Auto">
+                <CollectionView
+                    Grid.Row="0"
+                    ItemsSource="{Binding DanhSachGiong}"
+                    SelectedItem="{Binding GiongMeoDuocChon}"
+                    SelectionMode="Single">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout HorizontalItemSpacing="12" Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:GiongMeo">
+                            <Border Padding="14" StrokeShape="{RoundRectangle CornerRadius='8,8,8,8'}" StrokeThickness="0">
+                                <Label Style="{StaticResource TxtSubtitle1_2}" Text="{Binding TenGiong}" />
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <CollectionView
+                    Grid.Row="2"
+                    ItemsSource="{Binding MeoTheoGiong}"
+                    SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout HorizontalItemSpacing="16" Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="model:Meo">
+                            <controls:MyBorder
+                                BackgroundColor="{AppThemeBinding Light={StaticResource gray_4_light}, Dark={StaticResource gray_4_dark}}"
+                                StrokeShape="{RoundRectangle CornerRadius='16,16,16,16'}"
+                                StrokeThickness="0">
+                                <ffImageLoading:CachedImage
+                                    Aspect="AspectFill"
+                                    LoadingPlaceholder="icon_brand_bg.png"
+                                    Source="{Binding DuongDanAnh}"
+                                    WidthRequest="215" />
+                            </controls:MyBorder>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <Label Grid.Row="4" Style="{StaticResource TxtHeadline6_2}" Text="{Binding GiongMeoDuocChon.TenGiong}" />
+                <controls:BoChiaChuoi  Grid.Row="6" ChuoiDauVao="{Binding GiongMeoDuocChon.TinhCach, Converter={StaticResource TinhCachConverter}}" />
+    
+                <Label Grid.Row="8" Style="{StaticResource TxtCaption_1}" Text="{Binding GiongMeoDuocChon.MoTa}" />
+
+                <controls:MyBorder
+                    Grid.Row="10"
+                    Padding="10"
+                    BackgroundColor="Transparent"
+                    Stroke="{AppThemeBinding Light={StaticResource violet_9_light}, Dark={StaticResource purple_8_dark}}"
+                    StrokeDashArray="3,2"
+                    StrokeDashOffset="6"
+                    StrokeShape="{RoundRectangle CornerRadius='10,10,10,10'}"
+                    StrokeThickness="2">
+                    <Grid ColumnDefinitions="Auto, Auto" ColumnSpacing="12" RowDefinitions="Auto, Auto, Auto, Auto" RowSpacing="6">
+                        <Label Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="End" Style="{StaticResource TxtOverline_1}" Text="Thân thiện:" />
+                        <controls:ThanhDanhGia Grid.Row="0" Grid.Column="1" Style="{StaticResource RatingViewStyle}" GiaTriDanhGia="{Binding GiongMeoDuocChon.MucDoTrian}" />
+
+                        <Label Grid.Row="1" Grid.Column="0" HorizontalTextAlignment="End" Style="{StaticResource TxtOverline_1}" Text="Thích nghi:" />
+                        <controls:ThanhDanhGia Grid.Row="1" Grid.Column="1" Style="{StaticResource RatingViewStyle}" GiaTriDanhGia="{Binding GiongMeoDuocChon.DeThichNghi}" />
+
+                        <Label Grid.Row="2" Grid.Column="0" HorizontalTextAlignment="End" Style="{StaticResource TxtOverline_1}" Text="Trẻ nhỏ:" />
+                        <controls:ThanhDanhGia Grid.Row="2" Grid.Column="1" Style="{StaticResource RatingViewStyle}" GiaTriDanhGia="{Binding GiongMeoDuocChon.ThanThienTreEm}" />
+
+                        <Label Grid.Row="3" Grid.Column="0" HorizontalTextAlignment="End" Style="{StaticResource TxtOverline_1}" Text="Với chó:" />
+                        <controls:ThanhDanhGia Grid.Row="3" Grid.Column="1" Style="{StaticResource RatingViewStyle}" GiaTriDanhGia="{Binding GiongMeoDuocChon.ThanThienVoiCho}" />
+                    </Grid>
+                </controls:MyBorder>
+
+                <Grid
+                    Grid.Row="1"
+                    Grid.RowSpan="10"
+                    Margin="-12,0,-12,-12"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource background_light}, Dark={StaticResource background_dark}}"
+                    IsVisible="{Binding DangTaiGiong}">
+                    <ActivityIndicator
+                        HorizontalOptions="Center"
+                        IsRunning="{Binding DangTaiGiong}"
+                        IsVisible="{Binding DangTaiGiong}"
+                        VerticalOptions="Center"
+                        Color="{AppThemeBinding Light={StaticResource violet_9_light}, Dark={StaticResource purple_9_dark}}" />
+                </Grid>
+            </Grid>
+        </ScrollView>
+
+        <BoxView
+            Grid.Row="0"
+            IsVisible="{Binding DangXuLy}"
+            Color="{AppThemeBinding Light={StaticResource background_light}, Dark={StaticResource background_dark}}" />
+
+        <VerticalStackLayout
+            HorizontalOptions="CenterAndExpand"
+            IsVisible="{Binding DangXuLy}"
+            Spacing="10"
+            VerticalOptions="CenterAndExpand">
+            <ActivityIndicator
+                HeightRequest="50"
+                IsRunning="{Binding DangXuLy}"
+                WidthRequest="50"
+                Color="{AppThemeBinding Light={StaticResource violet_9_light}, Dark={StaticResource purple_9_dark}}" />
+
+            <Label
+                HorizontalTextAlignment="Center"
+                Style="{StaticResource TxtSubtitle1_1}"
+                Text="Đang tải giống mèo..."
+                TextColor="{AppThemeBinding Light={StaticResource violet_9_light}, Dark={StaticResource purple_9_dark}}" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

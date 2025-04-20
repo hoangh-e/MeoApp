@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Meow.Views.TrangMeoYeuThich"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ffImageLoading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Compat.Maui"
+    xmlns:model="clr-namespace:Meow.Models"
+    xmlns:reusablecomponent="clr-namespace:Meow.ReusableComponents"
+    xmlns:viewModel="clr-namespace:Meow.ViewModels"
+    x:DataType="viewModel:MeoYeuThichViewModel"
+    SizeChanged="KichThuocTrang_ThayDoi">
+
+    <Shell.TitleView>
+        <reusablecomponent:TieuDeThanhPhanDungLai />
+    </Shell.TitleView>
+
+    <Grid RowDefinitions="*">
+        <CollectionView
+            Grid.Row="0"
+            Margin="12,20,12,12"
+            ItemsSource="{Binding DanhSachYeuThich}"
+            SelectedItem="{Binding MeoDangChon}"
+            SelectionChangedCommand="{Binding XoaMeoYeuThichCommand}"
+            SelectionMode="Single">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout
+                    HorizontalItemSpacing="16"
+                    Orientation="Vertical"
+                    Span="{Binding SoCot}"
+                    VerticalItemSpacing="16" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:PhanHoiMeoYeuThich">
+                    <Border
+                        BackgroundColor="{AppThemeBinding Light={StaticResource gray_4_light}, Dark={StaticResource gray_4_dark}}"
+                        HeightRequest="160"
+                        StrokeShape="{RoundRectangle CornerRadius='16,16,16,16'}"
+                        StrokeThickness="0"
+                        WidthRequest="160">
+                        <Grid ColumnDefinitions="*,*,*,*,*" RowDefinitions="*,*,*,*,*">
+                            <ffImageLoading:CachedImage
+                                Grid.RowSpan="5"
+                                Grid.ColumnSpan="5"
+                                Aspect="AspectFill"
+                                LoadingPlaceholder="icon_brand_bg.png"
+                                Source="{Binding ThongTinAnh.DuongDanAnh}" />
+
+                            <Border
+                                Grid.Row="0"
+                                Grid.Column="4"
+                                BackgroundColor="#121212"
+                                Opacity="0.4"
+                                StrokeShape="{RoundRectangle CornerRadius='0,0,16,0'}"
+                                StrokeThickness="0" />
+                            <Image
+                                Grid.Row="0"
+                                Grid.Column="4"
+                                HorizontalOptions="Center"
+                                Scale="0.6"
+                                Source="icon_heart_solid.png"
+                                VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <ContentView>
+                    <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                        <Label Style="{StaticResource TxtCaption_1}" Text="Bạn chưa có mèo yêu thích nào cả, meow!" />
+                    </StackLayout>
+                </ContentView>
+            </CollectionView.EmptyView>
+        </CollectionView>
+
+        <BoxView
+            Grid.Row="0"
+            IsVisible="{Binding DangXuLy}"
+            Color="{AppThemeBinding Light={StaticResource background_light}, Dark={StaticResource background_dark}}" />
+
+        <VerticalStackLayout
+            HorizontalOptions="CenterAndExpand"
+            IsVisible="{Binding DangXuLy}"
+            Spacing="10"
+            VerticalOptions="CenterAndExpand">
+            <ActivityIndicator
+                HeightRequest="50"
+                IsRunning="{Binding DangXuLy}"
+                WidthRequest="50"
+                Color="{AppThemeBinding Light={StaticResource violet_9_light}, Dark={StaticResource purple_9_dark}}" />
+
+            <Label
+                HorizontalTextAlignment="Center"
+                Style="{StaticResource TxtSubtitle1_1}"
+                Text="Đang tải..."
+                TextColor="{AppThemeBinding Light={StaticResource violet_9_light}, Dark={StaticResource purple_9_dark}}" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

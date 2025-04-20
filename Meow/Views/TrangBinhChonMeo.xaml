@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Meow.Views.TrangBinhChonMeo"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converter="clr-namespace:Meow.Converters"
+    xmlns:ffImageLoading="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Compat.Maui"
+    xmlns:icon="clr-namespace:IconPacks.IconKind;assembly=IconPacks.Material"
+    xmlns:mdc="clr-namespace:Material.Components.Maui;assembly=Material.Components.Maui"
+    xmlns:page="clr-namespace:Meow.Views"
+    xmlns:reusablecomponent="clr-namespace:Meow.ReusableComponents"
+    xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+    xmlns:viewmodel="clr-namespace:Meow.ViewModels"
+    x:DataType="viewmodel:BinhChonMeoViewModel">
+
+    <ContentPage.Resources>
+        <converter:InvertBooleanConverter x:Key="InvertBooleanConverter" />
+    </ContentPage.Resources>
+
+    <Shell.TitleView>
+        <reusablecomponent:TieuDeThanhPhanDungLai />
+    </Shell.TitleView>
+
+    <Grid Padding="12,0" RowDefinitions="20, *, 16, 48, 30">
+
+        <Border Grid.Row="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource gray_4_light}, Dark={StaticResource gray_4_dark}}"
+                Shadow="{Shadow Brush='#121212', Offset='0,20', Radius='15', Opacity='0.3'}"
+                StrokeShape="{RoundRectangle CornerRadius='16,16,16,16'}"
+                StrokeThickness="0">
+            <Grid Padding="12" ColumnDefinitions="*, Auto" RowDefinitions="Auto, *">
+                <ffImageLoading:CachedImage
+                    Grid.RowSpan="2" Grid.ColumnSpan="2"
+                    Margin="-12"
+                    Aspect="AspectFill"
+                    FadeAnimationEnabled="False"
+                    IsEnabled="{Binding AnNoiDung, Converter={StaticResource InvertBooleanConverter}}"
+                    Source="{Binding DanhSachMeo[0].DuongDanAnh}">
+                    <ffImageLoading:CachedImage.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding XuLyYeuThichMeoCommand}" />
+                    </ffImageLoading:CachedImage.GestureRecognizers>
+                </ffImageLoading:CachedImage>
+
+                <Border Grid.Row="0" Grid.Column="1"
+                        BackgroundColor="#c0585858"
+                        HeightRequest="40"
+                        StrokeShape="{RoundRectangle CornerRadius='5,5,5,5'}"
+                        StrokeThickness="0"
+                        WidthRequest="40" />
+                <Image Grid.Row="0" Grid.Column="1"
+                       HorizontalOptions="Center"
+                       IsVisible="{Binding DangXuLy, Converter={StaticResource InvertBooleanConverter}}"
+                       Source="{Binding AnhTraiTim}"
+                       VerticalOptions="Center" />
+
+                <ActivityIndicator Grid.Row="0" Grid.Column="1"
+                                   HeightRequest="30"
+                                   IsRunning="{Binding DangXuLy}"
+                                   IsVisible="{Binding DangXuLy}"
+                                   WidthRequest="30"
+                                   Color="#cfbaff" />
+
+                <skia:SKLottieView Grid.RowSpan="2" Grid.ColumnSpan="2"
+                                   Margin="-12"
+                                   IsAnimationEnabled="{Binding HienThiHieuUng}"
+                                   IsVisible="{Binding HienThiHieuUng}"
+                                   Progress="{Binding TienTrinh}"
+                                   Source="animation_hearts.json" />
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1"
+                BackgroundColor="{AppThemeBinding Light={StaticResource gray_4_light}, Dark={StaticResource gray_4_dark}}"
+                IsVisible="{Binding AnNoiDung}"
+                StrokeShape="{RoundRectangle CornerRadius='16,16,16,16'}"
+                StrokeThickness="0">
+            <Grid RowDefinitions="10*,80*,10*">
+                <Image Grid.Row="1" Source="icon_brand_bg.png" />
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="3" ColumnDefinitions="Auto, *, Auto">
+            <mdc:Button Grid.Column="0"
+                        BackgroundColor="#56dd73"
+                        Command="{Binding LayMeoMoiCommand}"
+                        FontColor="White"
+                        FontSize="16"
+                        IconColor="White"
+                        IconData="{Static icon:Material.ThumbUp}"
+                        Shape="8"
+                        Style="{DynamicResource FilledButtonStyle}"
+                        Text="THÍCH" />
+
+            <mdc:Button Grid.Column="2"
+                        BackgroundColor="#e15050"
+                        Command="{Binding LayMeoMoiCommand}"
+                        FontColor="White"
+                        FontSize="16"
+                        IconColor="White"
+                        IconData="{Static icon:Material.ThumbDown}"
+                        Shape="8"
+                        Style="{DynamicResource FilledButtonStyle}"
+                        Text="KHÔNG THÍCH" />
+        </Grid>
+    </Grid>
+</ContentPage>
